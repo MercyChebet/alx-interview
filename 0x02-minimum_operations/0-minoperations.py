@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 """
-    Module 1 task which determines the number of minmum operations given n characters
+    Module 0 task which determines the number of minmum operations given n characters
 """
 
 
