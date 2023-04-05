@@ -12,24 +12,23 @@ def minOperations(n):
     Args:
         n (int): The number of desired n characters.
     Returns:
-        int: The number of minimal operations needed to get n characters
+        int: The number of minimal operations needed to get ncharacters
     or 0 if it is impossible to achieve n.
     """
-    if not isinstance(n, int):
+    idef minOperations(n):
+    """
+    Single character H
+    Fewest number of operations
+    """
+
+    if n <= 1:
         return 0
-    ops_count = 0
-    clipboard = 0
-    done = 1
-    while done < n:
-        if clipboard == 0:
-            clipboard = done
-            done += clipboard
-            ops_count += 2
-        elif n - done > 0 and (n - done) % done == 0:
-            clipboard = done
-            done += clipboard
-            ops_count += 2
-        elif clipboard > 0:
-            done += clipboard
-            ops_count += 1
-    return ops_count
+    numbr, index, operations = n, 2, 0
+
+    while numbr > 1:
+        if numbr % index == 0:
+            numbr = numbr / index
+            operations = operations + index
+        else:
+            index += 1
+    return operations
