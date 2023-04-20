@@ -1,38 +1,39 @@
+#!/usr/bin/python3
+"""UTF-8 Validation"""
+
+
 def validUTF8(data):
+    """The function determines if a given data set
+    represents a valid utf-8 encoding
     """
-    Determines if a given data set represents a valid UTF-8 encoding.
+    number_bytes = 0
 
-    :param data: a list of integers representing the bytes of the data
-    :return: True if data is a valid UTF-8 encoding, else return False
-    """
+    mask_1 = 1 << 7
+    mask_2 = 1 << 6
 
-    # Initialize a variable to keep track of the number of consecutive 1 bits in the current byte
-    numConsecutiveOnes = 0
+    for i in data:
 
-    # Loop through each byte in the data
-    for byte in data:
+        mask_byte = 1 << 7
 
-        # Check if the byte is a continuation byte (i.e., starts with 10)
-        if numConsecutiveOnes > 0:
-            if byte >> 6 == 0b10:
-                numConsecutiveOnes -= 1
-            else:
-                return False
-        else:
-            # Count the number of consecutive 1 bits in the current byte
-            mask = 0b10000000
-            while mask & byte:
-                numConsecutiveOnes += 1
-                mask >>= 1
+        if number_bytes == 0:
 
-            # Check if the byte is a valid start byte (i.e., has the correct number of 1 bits)
-            if numConsecutiveOnes == 0:
+            while mask_byte & i:
+                number_bytes += 1
+                mask_byte = mask_byte >> 1
+
+            if number_bytes == 0:
                 continue
-            elif numConsecutiveOnes == 1 or numConsecutiveOnes > 4:
+
+            if number_bytes == 1 or number_bytes > 4:
                 return False
 
-            # Decrement the number of consecutive 1 bits for the start byte
-            numConsecutiveOnes -= 1
+        else:
+            if not (i & mask_1 and not (i & mask_2)):
+                return False
 
-    # If we reach the end of the data and there are no remaining continuation bytes, the encoding is valid
-    return numConsecutiveOnes == 0
+        number_bytes -= 1
+
+    if number_bytes == 0:
+        return True
+
+    return False
