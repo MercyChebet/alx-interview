@@ -1,39 +1,38 @@
-#!/usr/bin/python3
-"""UTF-8 Validation"""
-
-
 def validUTF8(data):
-    """DThe function determines if a given data set
-    represents a valid utf-8 encoding
     """
-    number_bytes = 0
+    Determines if a given data set represents a valid UTF-8 encoding.
 
-    mask_1 = 1 << 7
-    mask_2 = 1 << 6
+    :param data: a list of integers representing the bytes of the data
+    :return: True if data is a valid UTF-8 encoding, else return False
+    """
 
-    for i in data:
+    # Initialize a variable to keep track of the number of consecutive 1 bits in the current byte
+    numConsecutiveOnes = 0
 
-        mask_byte = 1 << 7
+    # Loop through each byte in the data
+    for byte in data:
 
-        if number_bytes == 0:
-
-            while mask_byte & i:
-                number_bytes += 1
-                mask_byte = mask_byte >> 1
-
-            if number_bytes == 0:
-                continue
-
-            if number_bytes == 1 or number_bytes > 4:
+        # Check if the byte is a continuation byte (i.e., starts with 10)
+        if numConsecutiveOnes > 0:
+            if byte >> 6 == 0b10:
+                numConsecutiveOnes -= 1
+            else:
                 return False
-
         else:
-            if not (i & mask_1 and not (i & mask_2)):
+            # Count the number of consecutive 1 bits in the current byte
+            mask = 0b10000000
+            while mask & byte:
+                numConsecutiveOnes += 1
+                mask >>= 1
+
+            # Check if the byte is a valid start byte (i.e., has the correct number of 1 bits)
+            if numConsecutiveOnes == 0:
+                continue
+            elif numConsecutiveOnes == 1 or numConsecutiveOnes > 4:
                 return False
 
-        number_bytes -= 1
+            # Decrement the number of consecutive 1 bits for the start byte
+            numConsecutiveOnes -= 1
 
-    if number_bytes == 0:
-        return True
-
-    return False
+    # If we reach the end of the data and there are no remaining continuation bytes, the encoding is valid
+    return numConsecutiveOnes == 0
