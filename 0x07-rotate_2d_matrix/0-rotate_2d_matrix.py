@@ -1,24 +1,29 @@
-import { Seq } from 'immutable';
+#!/usr/bin/python3
+"""Rotates a 2D matrix"""
 
-export default function printBestStudents(object) {
-  const seq = Seq(object);
 
-  const filtered = seq.filter((student) => {
-    student.firstName.charAt(0).toUpperCase();
-    return student.score > 70;
-  });
+def rotate_2d_matrix(matrix):
+    """
+       Rotates 2D matrix 90 degrees clockwise
+       Matrix is edited in-place
+       args:
+          matrix
+    """
+    left, right = 0, len(matrix) - 1
 
-  function capFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
-
-  const JSObject = filtered.toJS();
-
-  Object.keys(JSObject).map((key) => {
-    JSObject[key].firstName = capFirstLetter(JSObject[key].firstName);
-    JSObject[key].lastName = capFirstLetter(JSObject[key].lastName);
-    return JSObject[key];
-  });
-
-  console.log(JSObject);
-}
+    while left < right:
+        for i in range(right - left):
+            top, bottom = left, right
+            # save topleft  value
+            topLeft = matrix[top][left + i]
+            # move bottom left to top left
+            matrix[top][left + i] = matrix[bottom - i][left]
+            # move bottom right to bottom left
+            matrix[bottom - i][left] = matrix[bottom][right - i]
+            # move top right to bottom right
+            matrix[bottom][right - i] = matrix[top + i][right]
+            # move top left to top right
+            matrix[top + i][right] = topLeft
+        right -= 1
+        left += 1
+        
