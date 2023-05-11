@@ -25,5 +25,4 @@ def rotate_2d_matrix(matrix):
             # move top left to top right
             matrix[top + i][right] = topLeft
         right -= 1
-        left += 1
-        
+        left += 1 
