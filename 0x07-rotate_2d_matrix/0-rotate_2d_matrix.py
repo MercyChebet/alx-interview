@@ -1,30 +1,24 @@
-#!/usr/bin/python3
-"""2D matrix rotation module.
-"""
+import { Seq } from 'immutable';
 
+export default function printBestStudents(object) {
+  const seq = Seq(object);
 
-def rotate_2d_matrix(matrix):
-    """Rotates an m by n 2D matrix in place.
-    """
-    if type(matrix) != list:
-        return
-    if len(matrix) <= 0:
-        return
-    if not all(map(lambda x: type(x) == list, matrix)):
-        return
-    rows = len(matrix)
-    cols = len(matrix[0])
-    if not all(map(lambda x: len(x) == cols, matrix)):
-        return
-    c, r = 0, rows - 1
-    for i in range(cols * rows):
-        if i % rows == 0:
-            matrix.append([])
-        if r == -1:
-            r = rows - 1
-            c += 1
-        matrix[-1].append(matrix[r][c])
-        if c == cols - 1 and r >= -1:
-            matrix.pop(r)
-        r -= 1
-        
+  const filtered = seq.filter((student) => {
+    student.firstName.charAt(0).toUpperCase();
+    return student.score > 70;
+  });
+
+  function capFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+  const JSObject = filtered.toJS();
+
+  Object.keys(JSObject).map((key) => {
+    JSObject[key].firstName = capFirstLetter(JSObject[key].firstName);
+    JSObject[key].lastName = capFirstLetter(JSObject[key].lastName);
+    return JSObject[key];
+  });
+
+  console.log(JSObject);
+}
